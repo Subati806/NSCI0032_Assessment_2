@@ -1,0 +1,55 @@
+T2:
+Question2.5: 
+Calculate the expectation value of T, and explain your approach.
+Answer:
+Using the ergodicity principle, the expectation value of 𝑇 is the time average of instantaneous temperatures 𝑇(𝑡) across all time steps
+
+Question2.6:
+What do you expect will happen? Run the simulation again and plot T as a function of time steps. Compare to the random case, and discuss the differences, what has happened? 
+Answer:
+Expected Behavior: 
+With constant velocity initialization, the system will start with an exact match to the target temperature. However, due to random perturbations, the temperature will fluctuate before equilibrating.
+Differences:
+1.Random Initialization: Velocities follow a Gaussian distribution, and the system takes longer to reach equilibrium.
+2.Constant Initialization: The system starts closer to equilibrium, with smaller fluctuations and faster stabilization.
+
+
+T3:
+Question3.2:
+Explain where you include the code and why? 
+Answer:
+The temperature rescaling code is placed inside the simulation loop, executed every fixed number of steps (e.g., every 10 steps). This ensures that velocities are adjusted after each velocity update, helping the system stay close to the target temperature while allowing natural fluctuations. Placing it here balances stability and physical accuracy.
+
+Question3.3:
+List three methods for simulating an NVT system and explain the principles.
+Answer:
+1.Velocity Rescaling: Periodically adjusts particle velocities to match the target temperature 𝑇0.
+2.Berendsen Thermostat: Couples the system to a heat bath, adjusting velocities to gradually bring the system to 𝑇0.
+3.Nosé-Hoover Thermostat: Introduces additional variables to dynamically control the system’s temperature, providing more accurate results.
+
+Question3.4:
+How would you use velocity rescaling in real projects? What are the pros and cons?
+Answer:
+Strategy:Start with frequent rescaling to quickly reach the target temperature.Gradually reduce the frequency to allow natural fluctuations and physical accuracy.
+Pros: Fast equilibration, simple implementation, numerical stability.
+Cons: May interfere with natural system dynamics, less realistic for long-term simulations.
+
+T4：
+Question4.1：
+Why are if r < 0.2 and if pe > 1000 included in compute_force? What happens if they are removed?
+Answer:
+1.if r < 0.2: Prevents numerical instability caused by excessively small particle distances, which could lead to unrealistically large forces.
+2.if pe > 1000: Limits potential energy to avoid unphysically high values, ensuring system stability.
+Without These Conditions: Removing these checks may cause the simulation to fail due to extreme forces or energies, resulting in non-physical behavior.
+
+Question4.2：
+Why is the force expression written as force = force2 * rij / r?
+Answer:
+1.force2: The magnitude of the force, calculated using the Lennard-Jones potential or similar formula.
+2.rij / r: The direction of the force, represented as a unit vector.
+Combining these ensures the force has both the correct magnitude and direction, consistent with physical laws.
+
+Question4.3：
+Why is the force added to forces[i] and subtracted from forces[j]?
+Answer:
+According to Newton’s Third Law, the force exerted by particle 𝑖on 𝑗is equal and opposite to the force exerted by 𝑗 on 𝑖.Adding the force to forces[i] and subtracting it from forces[j] ensures the total force in the system is conserved, maintaining physical accuracy.
